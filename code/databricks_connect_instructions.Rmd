@@ -135,22 +135,25 @@ library(SparkR, lib.loc = .libPaths(c(file.path('C:\\Users\\username\\AppData\\L
 Sys.setenv(SPARK_HOME = "c:\\users\\ericle\\appdata\\local\\continuum\\anaconda3\\envs\\dbconnect_6_2\\lib\\site-packages\\pyspark")
 ```
 
+You should now be able to initiate a Spark session and start running SparkR commands. If your cluster is not running it should start automatically (this might take some minutes).
+
 ```{r}
 SparkR::sparkR.session()
 ```
 
 ```{r}
 df <- as.DataFrame(faithful)
-head(df)
-
 df1 <- dapply(df, function(x) { x }, schema(df))
 collect(df1)
 ```
 
-You should now be able to initiate a Spark session and start running SparkR commands. If your cluster is not running it should start automatically (this might take some minutes).
+```{r}
+nba_player_stats <- read.df(source = "csv", path = "dbfs:/FileStore/tables/nbaplayerstats1519_2-d5cfb.csv", header="true", inferSchema = "true", sep = ';')
 
-**NOTE**  
-You can stop the Spark session but the cluster will not shut down until the autotermination time, or until you terminate it manually.
+head(nba_player_stats)
+```
+
+You can stop the Spark session but the cluster will not shut down until the preset  autotermination time, or until you terminate it manually.
 
 ```{r}
 SparkR::sparkR.session.stop()

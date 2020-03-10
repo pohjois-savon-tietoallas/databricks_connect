@@ -4,5 +4,5 @@
 .Ruserdata
 *.csv
 *.rds
-*.html
+*.nb.html
 *.md
