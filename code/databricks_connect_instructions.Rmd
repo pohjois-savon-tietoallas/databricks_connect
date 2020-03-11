@@ -1,7 +1,10 @@
 ---
 title: "Databricks connect instructions"
 output:
-    html_notebook
+    html_notebook:
+        toc: true
+        toc_float: true
+        number_sections: true
 ---
 
 Description: Instructions for installing and configuring Databricks connect  
@@ -10,42 +13,45 @@ Date: `r Sys.Date()`
 `r R.Version()$version.string`
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval=FALSE)
 ```
 
-# Instructions:
-## Background
-These instructions are for installing and configuring Databricks Connect in order to access Databricks from your local computer. Sorry Windows users, the installation is more complicated for you and will require adim privileges.
+
+# Background
+These instructions are for installing and configuring Databricks Connect in order to access Databricks from your local computer. Sorry Windows users, the installation is more complicated for you and will require admin privileges.
 
 **NOTE**  
 Once everything has been installed and is running the results that are returned from your analyses will be downloaded onto your computer. Therefore it is absolutely forbidden to analyse KUH data using Databricks Connect!
 
-## 1. Cluster setup
+# Cluster setup
 Create a Spark cluster with Databricks Runtime version 5.5 or 6.1 and above.
 
 If you are using Databricks Runtime 5.3 or below (unsupported), click the Spark tab and add the following Spark conf: spark.databricks.service.server.enabled true
 
-## 2. Client setup
+# Client setup
+
+## Install Java
+
 Download and install [Java 8](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html), which is the only Java version supported by Spark. **NOTE** you have to create an account at Oracle in order to download the installation file.
 
-**Windows users**  
-Java will try to isntall itself into the Program Files- directory. This has a space in it, which will cause problems. Install it in C:\\Java instead. You might also have to set the JAVA_HOME variable, more information [here.](https://datathirst.net/blog/2019/4/20/setup-databricks-connect-on-windows)
+**Windows users**. Java will try to install itself into the `Program Files`-directory. Path has a space in it, which will cause problems. Install it in `C:\\Java` instead. You might also have to set the `JAVA_HOME` variable, more information [here.](https://datathirst.net/blog/2019/4/20/setup-databricks-connect-on-windows)
 
-Download and install Python. It is likely easiest to install Python via [Anaconda](https://www.anaconda.com/distribution/). Anaconda includes a environment management system called conda, which should be used to create a new environment inside which you can install the packages needed for Databricks connect.
+## Install Python
+
+Download and install Python. It is easiest to install Python via [Anaconda](https://www.anaconda.com/distribution/). Anaconda includes a environment management system called conda, which should be used to create a new environment inside which you can install the packages needed for Databricks connect.
 
 The minor version of your client Python installation must be the same as the minor Python version of your Azure Databricks cluster (2.7, 3.5, 3.6, or 3.7). Databricks Runtime 5.x has Python 3.5, Databricks Runtime 5.x ML has Python 3.6, and Databricks Runtime 6.x and Databricks Runtime 6.x ML have Python 3.7.
 
-**Windows users**  
-Anaconda comes with a command line interface called Anaconda Powershell Prompt.  Use this to write the code blocks below, unless otherwise instructed.  
-**Mac users**  
-You can use the terminal to write the commands.
+**Windows users**. Anaconda comes with a command line interface called Anaconda Powershell Prompt.  Use this to write the code blocks below, unless otherwise instructed.  
+
+**Mac users**. You can use the terminal to write the commands.
 
 Create the environment with:
 ```{bash eval = FALSE}
 conda create --name dbconnect python=3.7
 ```
 
-Where dbconnect is the name of the environment and python=3.7 specifies the version of Python you want to install.
+Where `dbconnect` is the name of the environment and `python=3.7` specifies the version of Python you want to install.
 
 Activate the environment with:
 
@@ -65,10 +71,10 @@ Then install the Databricks Connect client:
 pip install -U databricks-connect==6.2.*
 ```
 
-Where databricks-connect==6.2.* is the Databricks Runtime version
+Where `databricks-connect==6.2.*` is the Databricks Runtime version
 
-## 3. Get connection values
-In order to connect to Databricks running on Azure you will need specific information about the cluster you will be connecting to: 
+# Get connection values
+In order to connect to Databricks running on Azure, you will need specific information about the cluster you will be connecting to: 
 
 * Databricks host
 * Cluster ID
@@ -80,20 +86,20 @@ This information can be found from the URL of your cluster. E.g.:
 
 https://northeurope.azuredatabricks.net/?o=2208xxxxxxxxxxxx#/setting/clusters/0212-yyyyyy-yyyyyyyy/
 
-In this case the **Databricks host** is https://northeurope.azuredatabricks.net  (The host will change when the KUH cloud environment is moved to West Europe.)
+- In this case the **Databricks host** is https://northeurope.azuredatabricks.net  (The host will change when the KUH cloud environment is moved to West Europe.)
 
-The **cluster ID** is: 0212-yyyyyy-yyyyyyyy
+- The **cluster ID** is: 0212-yyyyyy-yyyyyyyy
 
-The **organisation ID** is the part after ?o= in this case: 2208xxxxxxxxxxxx
+- The **organisation ID** is the part after ?o= in this case: 2208xxxxxxxxxxxx
 
-The **port** will be 15001 by default
+- The **port** will be 15001 by default
 
 Finally, a **user token** needs to be created. Click on the user profile icon in the upper right had corner of the Databricks website, click on **User Settings** and then the **Access Tokens** tab. From there you can create a token, give some information about it in the form of a comment, and spaecify a lifetime. Copy the created token and store it securely.
 
 **NOTE**  
 This is like a password, treat it as such!
 
-## 4. Configure connection settings
+# Configure connection settings
 Within the Python environment you created before run the following in order to supply the configuration values:
 
 ```{bash eval = FALSE}
@@ -109,10 +115,10 @@ databricks-connect test
 ```
 
 **NOTE**  
-I was not able to get this to work even though the connection worked through RStudio. I read about the same experience elsewhere as well.
+I was not able to get this to work even though the connection worked through RStudio. I read about the same experience elsewhere as well. Mac gave Warning of Java version `WARNING: Java versions >8 are not supported by this SDK`.
 
-## 5. Setting up RStudio
-Start off by downloading and unpacking [Spark](https://spark.apache.org/downloads.html) on your computer. Make sure the Hadoop version of Spark is 2.7. Unpack in e.g. C:\\Users\\username\\AppData\\Local\\Apache\\Spark Make a note of where you unpacked spark.
+# Setting up RStudio
+Start off by downloading and unpacking [Spark](https://spark.apache.org/downloads.html) on your computer. Make sure the Hadoop version of Spark is 2.7. Unpack in e.g. `C:\\Users\\username\\AppData\\Local\\Apache\\Spark`. Make a note of where you unpacked spark.
 
 **Windows users**  
 Spark will not work on Windows without WinUtils, which contains Windows binaries for Hadoop. This will require admin privileges. More information can be found [here.](https://datathirst.net/blog/2019/4/20/setup-databricks-connect-on-windows)  Also, make sure that your installation path (includes your username) for Spark does not have a space in it! If it does you can get around it by modifying the Windows registry, which can really screw up your Windows installation! Do this at your own risk! More information can be found [here.](https://datathirst.net/blog/2019/4/20/setup-databricks-connect-on-windows)
@@ -122,18 +128,36 @@ Then run the following command to get the path where the pyspark Java archive fi
 databricks-connect get-jar-dir
 ```
 
-This will return a path like this (in Windows):  C:\\users\\username\\appdata\\local\\continuum\\anaconda3\\envs\\dbconnect\\lib\\site-packages\\pyspark/jars
+This will return a path like this 
 
-Copy the file path of one directory above the JAR directory file path: C:\\users\\username\\appdata\\local\\continuum\\anaconda3\\envs\\dbconnect\\lib\\site-packages\\pyspark
+- Windows: `C:\\users\\username\\appdata\\local\\continuum\\anaconda3\\envs\\dbconnect\\lib\\site-packages\\pyspark/jars`
 
-Now switch over to RStudio. First, install SparkR. Then copy the two file directory paths and use them to tell SparkR where to look for Spark and pyspark. On a Windows computer backslashes need to be escaped, therefore the double backslashes in the path names. On a Mac computer the path will have front slashes.
+- Mac: `/usr/local/lib/python3.7/site-packages/pyspark/jars`
+
+Copy the file path of one directory above the JAR directory file path. For example `C:\\users\\username\\appdata\\local\\continuum\\anaconda3\\envs\\dbconnect\\lib\\site-packages\\pyspark`
+
+Now switch over to RStudio. First, install `SparkR` with command `install.packages("SparkR")`. Then copy the two file directory paths and use them to tell SparkR where to look for Spark and pyspark. On a Windows computer backslashes need to be escaped, therefore the double backslashes in the path names. On a Mac computer the path will have front slashes.
+
+In Windows:
+
 ```{r}
 library(dplyr)
 
-library(SparkR, lib.loc = .libPaths(c(file.path('C:\\Users\\username\\AppData\\Local\\Apache\\Spark\\Cache\\spark-2.4.3-bin-hadoop2.7', 'R', 'lib'), .libPaths())))
+library(SparkR, lib.loc = .libPaths(c(file.path("C:\\Users\\username\\AppData\\Local\\Apache\\Spark\\Cache\\spark-2.4.3-bin-hadoop2.7", "R", "lib"), .libPaths())))
 
 Sys.setenv(SPARK_HOME = "c:\\users\\ericle\\appdata\\local\\continuum\\anaconda3\\envs\\dbconnect_6_2\\lib\\site-packages\\pyspark")
 ```
+
+In Mac:
+
+```{r}
+library(dplyr)
+
+library(SparkR, lib.loc = .libPaths(c(file.path('~/AppData/spark-3.0.0-preview2-bin-hadoop2.7/', 'R', 'lib'), .libPaths())))
+
+Sys.setenv(SPARK_HOME = "/usr/local/lib/python3.7/site-packages/pyspark/")
+```
+
 
 You should now be able to initiate a Spark session and start running SparkR commands. If your cluster is not running it should start automatically (this might take some minutes).
 
@@ -158,3 +182,30 @@ You can stop the Spark session but the cluster will not shut down until the pres
 ```{r}
 SparkR::sparkR.session.stop()
 ```
+
+
+# Troubleshoot
+
+## Error starting a spark session
+
+In mac starting a new spark session with command `SparkR::sparkR.session()` creates an error:
+
+
+```
+Show in New WindowClear OutputExpand/Collapse Output
+Spark package found in SPARK_HOME: /usr/local/lib/python3.7/site-packages/pyspark/
+Launching java with spark-submit command /usr/local/lib/python3.7/site-packages/pyspark//bin/spark-submit   sparkr-shell /var/folders/vj/7vyqwvq510722f81159tbcjc0000gn/T//Rtmptx7xQv/backend_port1815f36742018 
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/usr/local/lib/python3.7/site-packages/pyspark/jars/spark-unsafe_2.11-2.4.5-SNAPSHOT.jar) to method java.nio.Bits.unaligned()
+WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+20/03/11 11:03:13 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+20/03/11 11:03:14 WARN MetricsSystem: Using default name SparkStatusTracker for source because neither spark.metrics.namespace nor spark.app.id is set.
+20/03/11 11:04:16 ERROR RBackendHandler: getOrCreateSparkSession on org.apache.spark.sql.api.r.SQLUtils failed
+.....
+```
+
