@@ -7,9 +7,9 @@ output:
         number_sections: true
 ---
 
-Description: Instructions for installing and configuring Databricks connect  
-Author: Eric Le Tortorec  
-Date: `r Sys.Date()`  
+**Description:** Instructions for installing and configuring Databricks connect <br>
+**Author:** Eric Le Tortorec, Jani Miettinen<br>
+**Date:** `r Sys.Date()`<br>
 `r R.Version()$version.string`
 
 ```{r setup, include = FALSE}
@@ -198,7 +198,7 @@ Java version 8 is required for this package; found version: 11.0.1
 
 Check installed java version in terminal:
 
-```
+```{bash eval = FALSE}
 ls -l /Library/Java/JavaVirtualMachines
 ```
 
