@@ -150,6 +150,7 @@ Sys.setenv(SPARK_HOME = "c:\\users\\ericle\\appdata\\local\\continuum\\anaconda3
 
 In Mac:
 
+
 ```{r}
 library(dplyr)
 
@@ -157,6 +158,7 @@ library(SparkR, lib.loc = .libPaths(c(file.path('~/AppData/spark-3.0.0-preview2-
 
 Sys.setenv(SPARK_HOME = "/usr/local/lib/python3.7/site-packages/pyspark/")
 ```
+
 
 
 You should now be able to initiate a Spark session and start running SparkR commands. If your cluster is not running it should start automatically (this might take some minutes).
@@ -186,26 +188,25 @@ SparkR::sparkR.session.stop()
 
 # Troubleshoot
 
-## Error starting a spark session
+## Mac: Error starting a spark session
 
-In mac starting a new spark session with command `SparkR::sparkR.session()` creates an error:
-
+In mac starting a new spark session with command `SparkR::sparkR.session()` might give you an error in console:
 
 ```
-Show in New WindowClear OutputExpand/Collapse Output
-Spark package found in SPARK_HOME: /usr/local/lib/python3.7/site-packages/pyspark/
-Launching java with spark-submit command /usr/local/lib/python3.7/site-packages/pyspark//bin/spark-submit   sparkr-shell /var/folders/vj/7vyqwvq510722f81159tbcjc0000gn/T//Rtmptx7xQv/backend_port1815f36742018 
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/usr/local/lib/python3.7/site-packages/pyspark/jars/spark-unsafe_2.11-2.4.5-SNAPSHOT.jar) to method java.nio.Bits.unaligned()
-WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-20/03/11 11:03:13 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
-Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-20/03/11 11:03:14 WARN MetricsSystem: Using default name SparkStatusTracker for source because neither spark.metrics.namespace nor spark.app.id is set.
-20/03/11 11:04:16 ERROR RBackendHandler: getOrCreateSparkSession on org.apache.spark.sql.api.r.SQLUtils failed
-.....
+Java version 8 is required for this package; found version: 11.0.1
 ```
+
+Check installed java version in terminal:
+
+```
+ls -l /Library/Java/JavaVirtualMachines
+```
+
+Set Java version directory in R before running SparkR session command:
+
+```{r}
+Sys.setenv(JAVA_HOME = "/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home")
+```
+
+
 
