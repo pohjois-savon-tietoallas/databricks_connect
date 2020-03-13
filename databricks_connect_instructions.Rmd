@@ -1,7 +1,11 @@
 ---
 title: "Databricks connect instructions"
+knit: (function(input_file, encoding) {
+    rmarkdown::render(input_file,
+    encoding = encoding,
+    output_file = file.path(dirname(input_file), 'docs/index.html'))})
 output:
-    html_notebook:
+    html_document:
         toc: true
         toc_float: true
         number_sections: true
